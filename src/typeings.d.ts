@@ -16,3 +16,5 @@ type PokemonDetail = {
     back_default: string;
   };
 };
+
+declare module "*.svg";

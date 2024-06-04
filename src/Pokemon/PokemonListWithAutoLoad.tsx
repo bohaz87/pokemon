@@ -8,7 +8,7 @@ export const PokemonListWithAutoLoad = memo(function () {
   const [items, setItems] = useState<Pokemon[]>([]);
   const limit = 20;
   const pageRef = useRef<number>(0);
-  const autoLoadElRef = useRef<HTMLDivElement>();
+  const autoLoadElRef = useRef<HTMLDivElement | null>(null);
 
   // useEffect(() => {
   //   setLoading(true);

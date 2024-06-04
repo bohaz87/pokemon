@@ -1,7 +1,15 @@
 import React, { useCallback, useState } from "react";
 import "./index.css";
 
-export function Pagination({ totalCount, pageSize = 20, onChange }) {
+export function Pagination({
+  totalCount,
+  pageSize = 20,
+  onChange,
+}: {
+  totalCount: number;
+  pageSize: number;
+  onChange: (value: number) => void;
+}) {
   const [currentPageIndex, setCurrentPageIndex] = useState(1);
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -11,7 +19,7 @@ export function Pagination({ totalCount, pageSize = 20, onChange }) {
   }
 
   const clickHandler = useCallback(
-    (i) => {
+    (i: number) => {
       setCurrentPageIndex(i);
       onChange(i - 1);
     },
@@ -27,7 +35,7 @@ export function Pagination({ totalCount, pageSize = 20, onChange }) {
           <button
             key={pageIndex}
             className={currentPageIndex === pageIndex ? "current" : ""}
-            onClick={() => clickHandler(pageIndex)}
+            onClick={() => clickHandler(pageIndex as number)}
           >
             {pageIndex}
           </button>
