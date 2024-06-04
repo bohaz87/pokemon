@@ -1,0 +1,14 @@
+.pagination {
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+}
+
+.pagination button.current {
+  background: #8beb8b;
+}
