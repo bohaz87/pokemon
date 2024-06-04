@@ -1,6 +1,7 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { ReactNode, memo, useEffect, useState } from "react";
 import { Loading } from "../Loading";
 import "./index.css";
+import { fetchPokemon } from "../api/pokemon";
 
 const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
   const [pending, setPending] = useState(true);
@@ -20,8 +21,7 @@ const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
+    fetchPokemon(url)
       .then((data) => {
         setDetail(data);
         setPending(false);
@@ -33,7 +33,7 @@ const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
       });
   }, [url]);
 
-  let detailEL;
+  let detailEL: ReactNode;
   if (pending) {
     detailEL = <Loading />;
   } else if (error) {
@@ -44,16 +44,13 @@ const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
         <div className="pokemon--image">
           <img src={detail.sprites.back_default} alt={name} />
         </div>
-        <div>
-          <header className="pokemon--header">{name}</header>
-          <div className="pokemon--stats">
-            {detail.stats.map((stat) => (
-              <div key={stat.stat.name} className="pokemon--stat">
-                <label>{stat.stat.name}:</label>
-                <span>{stat.base_stat}</span>
-              </div>
-            ))}
-          </div>
+        <div className="pokemon--stats">
+          {detail.stats.map((stat) => (
+            <div key={stat.stat.name} className="pokemon--stat">
+              <label>{stat.stat.name}:</label>
+              <span>{stat.base_stat}</span>
+            </div>
+          ))}
         </div>
       </>
     );
@@ -61,6 +58,7 @@ const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
 
   return (
     <div className="pokemon">
+      <header className="pokemon--header">{name}</header>
       <div className="pokemon--detail">{detailEL}</div>
     </div>
   );

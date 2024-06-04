@@ -1,18 +1,30 @@
 .app {
-  width: 80vw;
+  width: 90vw;
   margin: 2rem auto;
-  font-size: 2rem;
 }
 
 .app > header {
   text-align: center;
-  font-size: 4rem;
-  padding: var(--gap);
+  font-size: 3rem;
+  padding: 1rem;
   border-bottom: 1px solid #000;
-  margin: var(--gap--big) 0;
+  margin: 2rem 0;
+}
+
+.app > header > p {
+  font-size: 1rem;
 }
 
 .app-paging-control {
   font-size: 1rem;
   line-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  color: #8c5048;
+}
+
+.app-paging-control input[type="radio"] {
+  margin: 0 0.5rem 0 0;
 }

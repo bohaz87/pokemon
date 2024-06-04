@@ -4,12 +4,13 @@ import "./App.css";
 import React, { useState } from "react";
 
 function App() {
-  const [pagingType, setPagingType] = useState(1);
+  const [pagingType, setPagingType] = useState<0 | 1>(0);
 
   return (
     <div className="app">
       <header className="app-header">
         Pokémon Feed
+        <p>See README.md for sorting, filtering, and search </p>
         <div className="app-paging-control">
           <label>
             <input

@@ -1,42 +1,46 @@
-import React, { useEffect, useState, memo, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  memo,
+  useRef,
+  useCallback,
+  ReactNode,
+} from "react";
 import { Loading } from "../Loading";
 import { PokemonList } from "./PokemonList";
+import { fetchPokemonList } from "../api/pokemon";
 
-export const PokemonListWithAutoLoad = memo(function () {
+export const PokemonListWithAutoLoad = memo(function ({
+  limit = 20,
+}: {
+  limit?: number;
+}) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | string>(null);
   const [items, setItems] = useState<Pokemon[]>([]);
-  const limit = 20;
   const pageRef = useRef<number>(0);
   const autoLoadElRef = useRef<HTMLDivElement | null>(null);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch(
-  //     `https://pokeapi.co/api/v2/pokemon?offset=${
-  //       pageRef.current * limit
-  //     }&limit=${limit}`
-  //   )
-  //     .then(async (res) => {
-  //       pageRef.current++;
-  //       setLoading(false);
-  //       const data = await res.json();
-  //       setItems(data.results);
-  //       setError("");
-  //     })
-  //     .catch((err) => setError(err.toString()));
-  // }, []);
+  /**
+   * first load when didMount
+   */
+  useEffect(() => {
+    setLoading(true);
+    fetchPokemonList()
+      .then((data) => {
+        pageRef.current++;
+        setLoading(false);
+        setItems(data.results);
+        setError(null);
+      })
+      .catch((err) => setError(err.toString()));
+  }, []);
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     if (!loading) {
       setLoading(true);
-      fetch(
-        `https://pokeapi.co/api/v2/pokemon?offset=${
-          pageRef.current * limit
-        }&limit=${limit}`
-      )
-        .then(async (res) => {
-          const data = await res.json();
+      fetchPokemonList(`offset=${pageRef.current * limit}&limit=${limit}`)
+        .then((data) => {
           pageRef.current++;
           setLoading(false);
           setItems([...items, ...data.results]);
@@ -44,27 +48,21 @@ export const PokemonListWithAutoLoad = memo(function () {
         })
         .catch((err) => setError(err.toString()));
     }
-  };
+  }, [items, limit, loading]);
 
   useEffect(() => {
-    console.log(items);
-  }, [items]);
-
-  const observer = useRef(
-    new IntersectionObserver(
+    const ob = new IntersectionObserver(
       (entiries) => {
-        console.log("you can see me now");
-        loadMore();
+        const el = entiries[0];
+        if (el.isIntersecting) {
+          loadMore();
+        }
       },
       {
-        rootMargin: "20px",
+        rootMargin: "100px",
         threshold: 0,
       }
-    )
-  );
-
-  useEffect(() => {
-    const ob = observer.current;
+    );
     const el = autoLoadElRef.current;
     if (ob && el) {
       ob.observe(el);
@@ -74,9 +72,9 @@ export const PokemonListWithAutoLoad = memo(function () {
         ob.unobserve(el);
       }
     };
-  }, []);
+  }, [loadMore]);
 
-  let child;
+  let child: ReactNode;
 
   if (error) {
     child = error;
@@ -88,7 +86,7 @@ export const PokemonListWithAutoLoad = memo(function () {
     <>
       {child}
       {loading && <Loading style={{ gridColumn: "span 2" }} />}
-      {!loading && <div id="autoLoadMore" ref={autoLoadElRef} />}
+      <div id="autoLoadMore" ref={autoLoadElRef} />
     </>
   );
 });
