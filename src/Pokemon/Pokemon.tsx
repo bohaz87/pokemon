@@ -4,19 +4,7 @@ import { fetchPokemon } from "../api/pokemon";
 
 const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
   const [pending, setPending] = useState(true);
-  const [detail, setDetail] = useState<{
-    stats: [
-      {
-        base_stat: number;
-        stat: {
-          name: string;
-        };
-      }
-    ];
-    sprites: {
-      back_default: string;
-    };
-  } | null>(null);
+  const [detail, setDetail] = useState<PokemonDetail | null>(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
