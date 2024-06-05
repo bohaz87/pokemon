@@ -1,6 +1,5 @@
 import React, { ReactNode, memo, useEffect, useState } from "react";
 import { Loading } from "../Loading";
-import "./index.css";
 import { fetchPokemon } from "../api/pokemon";
 
 const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
@@ -41,13 +40,19 @@ const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
   } else if (detail) {
     detailEL = (
       <>
-        <div className="pokemon--image">
-          <img src={detail.sprites.back_default} alt={name} />
+        <div>
+          <img
+            src={detail.sprites.back_default}
+            alt={name}
+            className="w-[100px] h-[100px]"
+          />
         </div>
-        <div className="pokemon--stats">
+        <div className="text-base grow grid grid-cols-2 gap-4">
           {detail.stats.map((stat) => (
-            <div key={stat.stat.name} className="pokemon--stat">
-              <label>{stat.stat.name}:</label>
+            <div key={stat.stat.name}>
+              <label className="capitalize font-semibold mr-2">
+                {stat.stat.name}:
+              </label>
               <span>{stat.base_stat}</span>
             </div>
           ))}
@@ -57,9 +62,9 @@ const Pokemon = memo(({ name, url }: { name: string; url: string }) => {
   }
 
   return (
-    <div className="pokemon">
-      <header className="pokemon--header">{name}</header>
-      <div className="pokemon--detail">{detailEL}</div>
+    <div className="border border-slate-800 rounded-lg p-4 shadow-lg">
+      <header className="mb-4 capitalize font-bold text-2xl">{name}</header>
+      <div className="flex gap-8 text-base min-h-20">{detailEL}</div>
     </div>
   );
 });

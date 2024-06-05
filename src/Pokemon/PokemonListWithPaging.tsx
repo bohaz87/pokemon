@@ -4,8 +4,6 @@ import { PokemonList } from "./PokemonList";
 import { Pagination } from "../Pagination";
 import { fetchPokemonList } from "../api/pokemon";
 
-import "./index.css";
-
 const PokemonListWithPaging = function ({ limit = 20 }: { limit?: number }) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | string>(null);

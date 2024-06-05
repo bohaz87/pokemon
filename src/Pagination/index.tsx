@@ -1,5 +1,5 @@
 import React, { useCallback, useState, memo, ChangeEvent } from "react";
-import "./index.css";
+import { Button } from "../Button";
 
 export const Pagination = memo(function ({
   totalCount,
@@ -26,25 +26,26 @@ export const Pagination = memo(function ({
   );
 
   return (
-    <div className="pagination">
-      <div className="pagination-control">
-        <button onClick={() => clickHandler(currentPageIndex - 1)}>
+    <div className="my-4 flex gap-4 flex-wrap items-center justify-between">
+      <div className="grow flex gap-2">
+        <Button onClick={() => clickHandler(currentPageIndex - 1)}>
           &lt;&lt;
-        </button>
+        </Button>
         <input
           type="number"
           value={currentPageIndex}
           min="1"
           max={totalPages}
+          className="px-[1em] rounded-lg border border-pink-500 focus:outline-none focus:ring focus:ring-pink-300"
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             clickHandler(Number(e.target.value))
           }
         />
-        <button onClick={() => clickHandler(currentPageIndex + 1)}>
+        <Button onClick={() => clickHandler(currentPageIndex + 1)}>
           &gt;&gt;
-        </button>
+        </Button>
       </div>
-      <div className="pagination-summary">Total Pages: {totalPages}</div>
+      <div className="text-base">Total Pages: {totalPages}</div>
     </div>
   );
 });
